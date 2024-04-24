@@ -1,0 +1,26 @@
+{
+    "name": "",
+    "homePage": "",
+    "repos": {
+        "https://github.com/nf-core/modules.git": {
+            "modules": {
+                "nf-core": {
+                    "glimpse2/ligate": {
+                        "branch": "master",
+                        "git_sha": "ee7fee68281944b002bd27a8ff3f19200b4d3fad",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
+                    "glimpse2/phase": {
+                        "branch": "master",
+                        "git_sha": "9c71d32e372650e8bb3e1fb15339017aad5e3f7f",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
