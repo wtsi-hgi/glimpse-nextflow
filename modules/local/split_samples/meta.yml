@@ -1,0 +1,18 @@
+name: split_samples
+description: Split samples in a VCF into batches
+keywords:
+  - cutadapt
+input:
+  - batch_size:
+      type: var
+      description: Target batch size
+  - vcf_list:
+      type: path
+      description: List of input VCFs
+output:
+  - out:
+      type: path
+      description: files containing sample lists
+      pattern: "sample_*.txt"
+authors:
+  - "@Ruth Eberhardt"
