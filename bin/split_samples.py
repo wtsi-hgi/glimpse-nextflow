@@ -9,7 +9,7 @@ import os
 
 def get_options():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--vcf_dir", type=str, help='VCF directory')
+    parser.add_argument("--vcf", type=str, help='input VCF')
     parser.add_argument("--batch_size", type=int, help='desired batch size')
     parser.add_argument("--outdir", type=str, help='output directory containing sample lists')
     args = parser.parse_args()
@@ -25,20 +25,17 @@ def runcommand(cmd):
         errstring = "Error in command: " + cmd
         return errstring
 
-def find_and_split_samples(vcf_dir, batch_size, outdir):
-    sample_list = get_sample_list(vcf_dir)
+def find_and_split_samples(vcf, batch_size, outdir):
+    sample_list = get_sample_list(vcf)
     sample_list_split = split_samples(sample_list, batch_size)
     write_sample_lists(sample_list_split, outdir)
 
 
-def get_sample_list(vcf_dir): 
-    vcf_files = os.listdir(vcf_dir)  
-    for vf in vcf_files:
-        if vf.endswith('vcf.gz'):
-            cmd = "bcftools query -l " + vcf_dir + '/' + vf
-            samples = runcommand(cmd)
-            sample_list = samples.split()
-            return sample_list
+def get_sample_list(vcf): 
+    cmd = "bcftools query -l " + vcf
+    samples = runcommand(cmd)
+    sample_list = samples.split()
+    return sample_list
 
 
 def optimise_batch_size(batch_size, list_length):
@@ -107,8 +104,7 @@ def write_sample_lists(sample_list_split, outdir):
 
 def main():
     args = get_options()
-    find_and_split_samples(args.vcf_dir, args.batch_size, args.outdir)
-
+    find_and_split_samples(args.vcf, args.batch_size, args.outdir)
 
 
 if __name__ == '__main__':

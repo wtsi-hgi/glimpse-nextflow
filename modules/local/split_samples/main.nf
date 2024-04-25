@@ -4,14 +4,14 @@ process SPLIT_SAMPLES {
 
     input:
     val(batch_size)
-    path(vcf_dir)
+    path(vcf_in)
 
     output:
     path('samples_*.txt'), emit: sample_lists
 
     script:
     """
-    split_samples.py --vcf_dir ${vcf_dir} --batch_size ${batch_size} --outdir .
+    split_samples.py --vcf ${vcf_in} --batch_size ${batch_size} --outdir .
     """
 
 }

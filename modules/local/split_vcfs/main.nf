@@ -9,6 +9,7 @@ process SPLIT_VCFS {
     script:
     """
     bcftools view -S $sample_list $vcf -Oz -o vcf_sample_subset.vcf.gz
+    bcftools index vcf_sample_subset.vcf.gz
     """
 
 }
