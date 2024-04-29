@@ -17,7 +17,10 @@ workflow RUN_GLIMPSE {
                                                                     vcf, index , ref_bin ->
                                                                     [[], vcf, index, [], [], [], ref_bin, [], []]
                                                                 }
-    phase_input2 = channel.empty()
+    phase_input2 = ['', params.fasta, params.fai]
+
+    //phase_input.view()
+
 
     GLIMPSE2_PHASE(phase_input, phase_input2)
 
