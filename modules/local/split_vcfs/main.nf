@@ -4,7 +4,7 @@ process SPLIT_VCFS {
     tuple path(vcf), path(sample_list)
 
     output:
-    path('vcf_sample_subset.vcf.gz')
+    tuple path('vcf_sample_subset.vcf.gz'), path('vcf_sample_subset.vcf.gz.csi'), emit: split_vcfs
 
     script:
     """
