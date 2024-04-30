@@ -95,7 +95,7 @@ def split_samples(sample_list, batch_size):
 def write_sample_lists(sample_list_split, outdir):
     i = 1
     for lst in sample_list_split:
-        sample_file = outdir + "/samples_" + str(i) + ".txt"
+        sample_file = outdir + "/samples_" + str(i)
         with open(sample_file, 'w') as sf:
             sf.write(('\n').join(lst))
             sf.write('\n')

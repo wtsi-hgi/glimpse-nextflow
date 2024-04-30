@@ -7,7 +7,7 @@ process SPLIT_SAMPLES {
     path(vcf_in)
 
     output:
-    path('samples_*.txt'), emit: sample_lists
+    path('samples_*'), emit: sample_lists
 
     script:
     """
