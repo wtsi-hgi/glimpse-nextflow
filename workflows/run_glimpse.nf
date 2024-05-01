@@ -1,6 +1,8 @@
 include { SPLIT_SAMPLES } from '../modules/local/split_samples/main'
 include { SPLIT_VCFS } from '../modules/local/split_vcfs/main'
 include { GLIMPSE2_PHASE } from '../modules/nf-core/glimpse2/phase/main'
+include { BCFTOOLS_INDEX as INDEX_PHASE  } from '../modules/nf-core/bcftools/index/main.nf'
+include { BCFTOOLS_INDEX as INDEX_LIGATE } from '../modules/nf-core/bcftools/index/main.nf'
 
 workflow RUN_GLIMPSE {
 
@@ -9,16 +11,21 @@ workflow RUN_GLIMPSE {
     vcf = channel.fromPath(params.vcf_in)
     vcf_samples = vcf.combine(SPLIT_SAMPLES.out.sample_lists.flatten())
 
-    SPLIT_VCFS(vcf_samples)
-    // // SPLIT_VCFS.out.split_vcfs.view()
+    vcf_samples_input = vcf_samples.map{
+	vcf, sample_list ->
+		[[id: vcf.getSimpleName() + "-" + sample_list.getName(), batch: sample_list.getName()], vcf, sample_list]
+}
+
+    SPLIT_VCFS(vcf_samples_input)
+    SPLIT_VCFS.out.split_vcfs.view()
 
     ref = channel.fromPath("${params.refdir}*.bin")
 
     phase_meta = [id: 'phase']
     
     phase_input = SPLIT_VCFS.out.split_vcfs.combine(ref).map{
-                                                                    vcf, index , ref_bin ->
-                                                                    [phase_meta, vcf, index, [], [], [], ref_bin, [], []]
+                                                                    meta, vcf, index , ref_bin ->
+                                                                    [meta, vcf, index, [], [], [], ref_bin, [], []]
                                                                 }
     phase_input2 = ['', params.fasta, params.fai]
 
@@ -26,6 +33,10 @@ workflow RUN_GLIMPSE {
 
     GLIMPSE2_PHASE.out.versions.view()
 
+    INDEX_PHASE ( GLIMPSE2_PHASE.out.phased_variants )
+
+    // attempt for splitting samples in phase
+    ///
     // phase_input = vcf_samples.combine(ref).map {
     //                                                 vcf, samples, ref_bin ->
     //                                                 [phase_meta, vcf, [], samples, [], [], ref_bin, [], []]
