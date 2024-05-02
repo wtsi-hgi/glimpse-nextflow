@@ -17,7 +17,6 @@ workflow RUN_GLIMPSE {
 }
 
     SPLIT_VCFS(vcf_samples_input)
-    SPLIT_VCFS.out.split_vcfs.view()
 
     ref = channel.fromPath("${params.refdir}*.bin")
 
@@ -31,9 +30,19 @@ workflow RUN_GLIMPSE {
 
     GLIMPSE2_PHASE(phase_input, phase_input2)
 
-    GLIMPSE2_PHASE.out.versions.view()
+    //GLIMPSE2_PHASE.out.phased_variants.view()
 
     INDEX_PHASE ( GLIMPSE2_PHASE.out.phased_variants )
+
+    ligate_input = GLIMPSE2_PHASE.out.phased_variants
+                                    .groupTuple()
+                                    .combine( INDEX_PHASE.out.csi
+                                            .groupTuple()
+                                            .collect(), by: 0 )
+ 
+                                     
+    
+    ligate_input.view()
 
     // attempt for splitting samples in phase
     ///
