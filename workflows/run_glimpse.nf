@@ -1,6 +1,7 @@
 include { SPLIT_SAMPLES } from '../modules/local/split_samples/main'
 include { SPLIT_VCFS } from '../modules/local/split_vcfs/main'
 include { GLIMPSE2_PHASE } from '../modules/nf-core/glimpse2/phase/main'
+include { GLIMPSE2_LIGATE } from '../modules/nf-core/glimpse2/ligate/main'
 include { BCFTOOLS_INDEX as INDEX_PHASE  } from '../modules/nf-core/bcftools/index/main.nf'
 include { BCFTOOLS_INDEX as INDEX_LIGATE } from '../modules/nf-core/bcftools/index/main.nf'
 
@@ -30,31 +31,17 @@ workflow RUN_GLIMPSE {
 
     GLIMPSE2_PHASE(phase_input, phase_input2)
 
-    //GLIMPSE2_PHASE.out.phased_variants.view()
-
     INDEX_PHASE ( GLIMPSE2_PHASE.out.phased_variants )
 
-    ligate_input = GLIMPSE2_PHASE.out.phased_variants
-                                    .groupTuple()
-                                    .combine( INDEX_PHASE.out.csi
-                                            .groupTuple()
-                                            .collect(), by: 0 )
- 
-                                     
-    
-    ligate_input.view()
+    index_output_ch = INDEX_PHASE.out.csi.groupTuple(by: 0)
 
-    // attempt for splitting samples in phase
-    ///
-    // phase_input = vcf_samples.combine(ref).map {
-    //                                                 vcf, samples, ref_bin ->
-    //                                                 [phase_meta, vcf, [], samples, [], [], ref_bin, [], []]
+    ligate_input = GLIMPSE2_PHASE.out.phased_variants.groupTuple(by: 0).join(index_output_ch, by: 0)
+   
+    GLIMPSE2_LIGATE ( ligate_input )
 
-    //                                                 }
-    
-    // phase_input2 = ['', params.fasta, params.fai]
+    INDEX_LIGATE ( GLIMPSE2_LIGATE.out.merged_variants )
 
-    // GLIMPSE2_PHASE(phase_input, phase_input2)
+
 
 
 }
