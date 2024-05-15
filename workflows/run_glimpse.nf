@@ -6,6 +6,7 @@ include { BCFTOOLS_INDEX as INDEX_PHASE  } from '../modules/nf-core/bcftools/ind
 include { BCFTOOLS_INDEX as INDEX_LIGATE } from '../modules/nf-core/bcftools/index/main.nf'
 include { BCFTOOLS_MERGE } from '../modules/nf-core/bcftools/merge/main.nf'
 include { BCFTOOLS_INDEX as INDEX_MERGE } from '../modules/nf-core/bcftools/index/main.nf'
+include { BCFTOOLS_IMPUTE_INFO } from '../modules/local/bcftools_impute_info/main'
 
 workflow RUN_GLIMPSE {
 
@@ -58,7 +59,8 @@ workflow RUN_GLIMPSE {
     BCFTOOLS_MERGE ( merge_ch, merge_input_2, merge_input_3, params.ref_bed )
 
     INDEX_MERGE ( BCFTOOLS_MERGE.out.merged_variants )
-
-
+    
+    impute_info_ch = BCFTOOLS_MERGE.out.merged_variants.join(INDEX_MERGE.out.csi)
+    BCFTOOLS_IMPUTE_INFO ( impute_info_ch )
 
 }

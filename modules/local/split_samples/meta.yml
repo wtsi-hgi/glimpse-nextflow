@@ -1,7 +1,7 @@
 name: split_samples
 description: Split samples in a VCF into batches
 keywords:
-  - cutadapt
+  - batch samples
 input:
   - batch_size:
       type: var

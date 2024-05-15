@@ -1,0 +1,18 @@
+name: bcftools_impute_info
+description: Run bcftools impute info plugin
+keywords:
+  - bcftools
+  - impute info
+input:
+  - meta:
+      type: map
+      description: sample information
+  - vcf:
+      type: file
+      description: Input VCF file
+output:
+  - out:
+      type: path
+      description: Output VCF file
+authors:
+  - "@Ruth Eberhardt"
