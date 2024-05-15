@@ -18,4 +18,5 @@ To run, modify the following parameters in nextflow.config
 batch_size gives a target batch size, 100-200 is recommended. The multisample VCF is split into batches of approximately the target batch size, which is adjusted so that the final batch is not too small.
 
 Submit to the farm as follows:
+
     bsub -J nextflow -R "select[mem>4000] rusage[mem=4000]" -M 4000 -o out -e err -qlong "nextflow run /path/to/glimpse-nextflow/main.nf -with-trace -profile sanger"
