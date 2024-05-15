@@ -2,6 +2,9 @@ process BCFTOOLS_IMPUTE_INFO {
 
     label 'process_medium'
 
+    publishDir "${params.publishdir}", mode: 'copy', pattern: "glimpse_vcf_annotated.vcf.gz"
+    publishDir "${params.publishdir}", mode: 'copy', pattern: "glimpse_vcf_annotated.vcf.gz.csi"
+
     input:
     tuple val(meta), path(vcf), path(csi)
 
