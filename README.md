@@ -2,7 +2,7 @@
 
 Nextflow pipeline to run GLIMPSE2 on a multisample VCF.
 
-This pipeline first lists the samples in the inout multisample VCF, splits this into batches, splits the multisample VCF into VCFs for each batch. GLIMPSE2 phase is then run on each batch for each file in the reference directory. The output of GLIMPSE2 phase is ligated using GLIMPSE2 ligate to produce a phased VCF per batch. These per-batch phased VCFs are them merged using bcftools merge resulting in a VCF containing phased variants for all samples. Finally bcftools +impute-info is used to recalculate INFO scores.
+This pipeline first lists the samples in the input multisample VCF, splits this into batches, splits the multisample VCF into VCFs for each batch. GLIMPSE2 phase is then run on each batch for each file in the reference directory. The output of GLIMPSE2 phase is ligated using GLIMPSE2 ligate to produce a phased VCF per batch. These per-batch phased VCFs are them merged using bcftools merge resulting in a VCF containing phased variants for all samples. Finally bcftools +impute-info is used to recalculate INFO scores.
 
 To run, modify the following parameters in nextflow.config
 
