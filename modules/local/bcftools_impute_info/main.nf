@@ -2,6 +2,10 @@ process BCFTOOLS_IMPUTE_INFO {
 
     label 'process_medium'
 
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/bcftools:1.18--h8b25389_0':
+        'biocontainers/bcftools:1.18--h8b25389_0' }"
+
     publishDir "${params.publishdir}", mode: 'copy', pattern: "glimpse_vcf_annotated.vcf.gz"
     publishDir "${params.publishdir}", mode: 'copy', pattern: "glimpse_vcf_annotated.vcf.gz.csi"
 
