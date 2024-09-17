@@ -2,6 +2,10 @@ process SPLIT_VCFS {
 
     label 'process_medium'
 
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/bcftools:1.18--h8b25389_0':
+        'biocontainers/bcftools:1.18--h8b25389_0' }"
+
     input:
     tuple val(meta), path(vcf), path(sample_list)
 
