@@ -2,7 +2,7 @@
 
 Nextflow pipeline to run GLIMPSE2 on a multisample VCF.
 
-This pipeline first lists the samples in the input multisample VCF, splits this into batches, splits the multisample VCF into VCFs for each batch. GLIMPSE2 phase is then run on each batch for each file in the reference directory. The output of GLIMPSE2 phase is ligated using GLIMPSE2 ligate to produce a phased VCF per batch. These per-batch phased VCFs are them merged using bcftools merge resulting in a VCF containing phased variants for all samples. Finally bcftools +impute-info is used to recalculate INFO scores.
+This pipeline first lists the samples in the input multisample VCF, splits these samples into batches, and then splits the multisample VCF into seperate (smaller) mutisample VCFs for each batch. GLIMPSE2 phase is then run on each batch for each file in the binary reference directory. The output of GLIMPSE2 phase is ligated using GLIMPSE2 ligate to produce a phased VCF per batch. These per-batch phased VCFs are them merged using bcftools merge resulting in a VCF containing phased variants for all samples. Finally bcftools +impute-info is used to recalculate INFO scores.
 
 In order to run this pipeline you will first need to generate a binary reference panel, as described
 on https://odelaneau.github.io/GLIMPSE/docs/tutorials/getting_started/#4-create-binary-reference-panel
@@ -24,4 +24,4 @@ The ref_bed file gives the regions you are interested in, this can be a bed file
 
 For users at Sanger, this can be submitted to the farm as follows:
 
-    bsub -J nextflow -R "select[mem>4000] rusage[mem=4000]" -M 4000 -o out -e err -qlong "nextflow run /path/to/glimpse-nextflow/main.nf -with-trace -profile sanger"
+    bsub -J nextflow -R "select[mem>4000] rusage[mem=4000]" -M 4000 -o out -e err -qoversubscribed "nextflow run /path/to/glimpse-nextflow/main.nf -with-trace -profile sanger"
